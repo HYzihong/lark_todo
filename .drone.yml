@@ -1,0 +1,46 @@
+kind: pipeline
+type: docker
+name: default
+steps:
+    - name: build
+      image: node
+      commands:
+          - npm i -g @nestjs/cli
+          - npm i
+          - npm run build
+          - cp package.json ./dist
+          - cp package-lock.json ./dist
+          - cd ./dist && npm i
+    - name: upload
+      image: appleboy/drone-scp
+      settings:
+          host: xx.xx.xx.xx
+          username: admin
+          key:
+              from_secret: ssh_key
+          port: 22
+          command_timeout: 2m
+          target: /tmp/lark-api
+          source:
+              - ./dist
+    - name: deploy
+      image: appleboy/drone-ssh
+      environment:
+          DEPLOY_PATH:
+              from_secret: deploy_path
+          ENV_VARS:
+              from_secret: env_vars
+      settings:
+          host: xx.xx.xx.xx
+          username: admin
+          key:
+              from_secret: ssh_key
+          port: 22
+          command_timeout: 2m
+          envs: [DEPLOY_PATH, ENV_VARS]
+          script:
+              - mkdir -p $${DEPLOY_PATH} && rm -rf $${DEPLOY_PATH}
+              - mv /tmp/tradovel-api/dist $${DEPLOY_PATH}
+              - cd $${DEPLOY_PATH}
+              - echo "$${ENV_VARS}" > .env
+              - rm -rf /tmp/lark-api
