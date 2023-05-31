@@ -16,7 +16,7 @@ import { DtoValidation } from '@/modules/core/decorators';
 import { IsDataExist } from '@/modules/database/constraints';
 import { PaginateOptions } from '@/modules/database/types';
 
-import { CommentEntity, TaskEntity } from '../entities';
+import { CommentEntity } from '../entities';
 
 /**
  * 评论分页查询验证
@@ -26,10 +26,7 @@ export class QueryCommentDto implements PaginateOptions {
     @ApiProperty({
         description: '任务ID',
     })
-    @IsDataExist(TaskEntity, {
-        message: '所属的任务不存在',
-    })
-    @IsUUID(undefined, { message: '任务ID格式错误' })
+    @IsUUID(undefined, { always: true, message: '任务ID格式错误' })
     @IsOptional()
     task?: string;
 
@@ -78,8 +75,7 @@ export class CreateCommentDto {
         description: '任务 ID',
         type: String,
     })
-    @IsDataExist(TaskEntity, { message: '指定的任务不存在' })
-    @IsUUID(undefined, { message: '任务ID格式错误' })
+    @IsUUID(undefined, { always: true, message: '任务ID格式错误' })
     @IsDefined({ message: '评论任务ID必须指定' })
     task!: string;
 

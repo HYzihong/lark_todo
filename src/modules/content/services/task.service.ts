@@ -17,6 +17,7 @@ import { TaskRepository } from '../repositories/task.repository';
 
 import { CategoryService } from './category.service';
 import { CommentService } from './comment.service';
+import { HistoricalRecordsService } from './historical-record.service';
 import { UserService } from './user.service';
 
 // 任务查询接口
@@ -40,6 +41,7 @@ export class PostService {
         protected categoryService: CategoryService,
         protected userService: UserService,
         protected commentService: CommentService,
+        protected historicalRecordsService: HistoricalRecordsService,
     ) {}
 
     /**
@@ -96,6 +98,13 @@ export class PostService {
         await this.commentService.create({
             body: ` @${createUser.username} 创建了任务`,
             task: task.id,
+        });
+
+        // creat first historical record
+        await this.historicalRecordsService.create({
+            body: ` @${createUser.username} 创建了任务`,
+            task: task.id,
+            creator: createUser.id,
         });
 
         return this.detail(task.id);

@@ -11,6 +11,7 @@ import {
 } from 'typeorm';
 
 import { CommentEntity } from './comment.entity';
+import { HistoricalRecordsEntity } from './historical-record.entity';
 import { TaskEntity } from './task.entity';
 
 /**
@@ -67,6 +68,12 @@ export class UserEntity extends BaseEntity {
         cascade: true,
     })
     comments: CommentEntity[];
+
+    @Expose()
+    @OneToMany((type) => HistoricalRecordsEntity, (record) => record.creator, {
+        cascade: true,
+    })
+    records: HistoricalRecordsEntity[];
 
     @Expose()
     @Type(() => Date)

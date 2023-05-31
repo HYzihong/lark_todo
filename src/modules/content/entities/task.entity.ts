@@ -17,6 +17,7 @@ import { ReminderOrderType } from '../constants';
 
 import { CategoryEntity } from './category.entity';
 import { CommentEntity } from './comment.entity';
+import { HistoricalRecordsEntity } from './historical-record.entity';
 import { UserEntity } from './user.entity';
 
 /**
@@ -185,6 +186,11 @@ export class TaskEntity extends BaseEntity {
         cascade: true,
     })
     comments: CommentEntity[];
+
+    @OneToMany((type) => HistoricalRecordsEntity, (record) => record.task, {
+        cascade: true,
+    })
+    records: HistoricalRecordsEntity[];
 
     @Expose()
     commentCount: number;

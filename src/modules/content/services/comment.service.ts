@@ -37,7 +37,7 @@ export class CommentService {
     }
 
     /**
-     * 查找一篇文章的评论并分页
+     * 查找一篇任务的评论并分页
      * @param dto
      */
     async paginate(dto: QueryCommentDto) {
@@ -92,7 +92,7 @@ export class CommentService {
     }
 
     /**
-     * 获取评论所属文章实例
+     * 获取评论所属任务实例
      * @param id
      */
     protected async getTask(id: string) {
