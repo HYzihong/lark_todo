@@ -167,7 +167,10 @@ export class TaskEntity extends BaseEntity {
      * 父任务
      */
     @Expose()
-    parent: TaskEntity | null;
+    @Column({
+        comment: '父任务',
+    })
+    parent: string;
 
     /**
      * 分类
@@ -194,6 +197,17 @@ export class TaskEntity extends BaseEntity {
 
     @Expose()
     commentCount: number;
+
+    /**
+     * 子任务的个数
+     */
+    @Expose()
+    @Column({
+        comment: '子任务的个数',
+        name: 'children_count',
+        default: () => 0,
+    })
+    childrenCount: number;
 
     @Expose()
     @Column({

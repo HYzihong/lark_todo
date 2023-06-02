@@ -19,11 +19,10 @@ export class TaskSubscriber {
     }
 
     async beforeInsert(event: InsertEvent<TaskEntity>) {
-        console.log(`BEFORE TaskEntity INSERTED: `, event.entity);
+        // console.log(`BEFORE TaskEntity INSERTED: `, event.entity);
         if (isNil(event.entity.serialNumber)) {
-            console.log(1);
             event.entity.serialNumber = `t1000${await this.repository.count()}`;
-            console.log(event.entity.serialNumber);
+            // console.log(event.entity.serialNumber);
         }
         if (isNil(event.entity.parent) && !event.entity.isRoot) {
             event.entity.isRoot = true;

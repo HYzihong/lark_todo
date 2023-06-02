@@ -1,12 +1,3 @@
-/*
- * @Author: hy
- * @Date: 2023-04-06 22:22:09
- * @LastEditors: hy
- * @Description:
- * @LastEditTime: 2023-06-01 04:36:59
- * @FilePath: /lark_todolist/src/modules/content/dtos/task.dto.ts
- * Copyright 2023 hy, All Rights Reserved.
- */
 import { ApiProperty, ApiPropertyOptional, PartialType } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import {

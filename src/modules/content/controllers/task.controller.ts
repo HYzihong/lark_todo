@@ -33,6 +33,15 @@ export class PostController {
         return this.service.paginate(options);
     }
 
+    @Get('/children/:id')
+    @ApiOperation({ summary: '查询所有子任务' })
+    async getChildrenTask(
+        @Param('id', new ParseUUIDPipe())
+        id: string,
+    ) {
+        return this.service.getChildrenTask(id);
+    }
+
     @Get(':id')
     @SerializeOptions({ groups: ['task-detail'] })
     @ApiOperation({ summary: '查询任务详情' })

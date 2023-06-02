@@ -55,6 +55,19 @@ export class PostService {
     }
 
     /**
+     *
+     * @param root
+     */
+    async getChildrenTask(rootId: string): Promise<TaskEntity[]> {
+        return this.repository.find({
+            where: {
+                isRoot: false,
+                parent: rootId,
+            },
+        });
+    }
+
+    /**
      * 查询单篇任务
      * @param id
      * @param callback 添加额外的查询
@@ -89,8 +102,15 @@ export class PostService {
                 : [],
             creator: createUser,
             executor: executorUser,
-            parent: !isNil(data.parent) ? await this.detail(data.parent) : null,
+            parent: !isNil(data.parent) ? data.parent : '',
         };
+
+        if (!isNil(data.parent)) {
+            const parent = await this.detail(data.parent);
+            this.repository.update(parent.id, {
+                childrenCount: parent.childrenCount + 1,
+            });
+        }
 
         const task = await this.repository.save(taskTemp);
 
@@ -110,6 +130,10 @@ export class PostService {
         return this.detail(task.id);
     }
 
+    /**
+     * 根据用户批量创建任务
+     * @param data
+     */
     async creatByUserIds(data: CreatByUserIdsDto) {
         const { ids, task } = data;
         const item = await this.detail(task);
@@ -146,7 +170,7 @@ export class PostService {
                 {
                     ...data,
                     executor: await this.userService.findById(data.executor),
-                    parent: !isNil(data.parent) ? await this.detail(data.parent) : null,
+                    parent: !isNil(data.parent) ? data.parent : '',
                 },
                 ['id', 'categories', 'creator'],
             ),
